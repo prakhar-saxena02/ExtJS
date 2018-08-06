@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <link href = "https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-classic/resources/theme-classic-all.css" 
+         rel = "stylesheet" />
+      <script type = "text/javascript" 
+         src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+      
+      <script type = "text/javascript">
+         // Creation of data model
+         Ext.define('StudentDataModel', {
+            extend: 'Ext.data.Model',
+            fields: [
+               {name: 'name', mapping : 'name'},
+               {name: 'age', mapping : 'age'},
+               {name: 'marks', mapping : 'marks'}
+            ]
+         });
+         
+         Ext.onReady(function() {
+            // Store data
+            var myData = [
+               { name : "Asha", age : "16", marks : "90" },
+               { name : "Vinit", age : "18", marks : "95" },
+               { name : "Anand", age : "20", marks : "68" },
+               { name : "Niharika", age : "21", marks : "86" },
+               { name : "Manali", age : "22", marks : "57" }
+            ];
+            
+            // Creation of first grid store
+            var gridStore = Ext.create('Ext.data.Store', {
+               model: 'StudentDataModel',
+               data: myData
+            });
+            
+            // Creation of first grid
+            Ext.create('Ext.grid.Panel', {
+               id                : 'gridId',
+               store             : gridStore,
+               stripeRows        : true,
+               title             : 'Students Grid',  // Title for the grid
+               renderTo          :'gridDiv',         // Div id where the grid has to be rendered
+               width             : 600,
+               collapsible       : true,             // property to collapse grid
+               enableColumnMove  :true,              // property which allows column to move to different position by dragging that column.
+               enableColumnResize:true,        // property which allows to resize column run time.
+               
+               columns           :
+               [{ 
+                  header: "Student Name",
+                  dataIndex: 'name',	
+                  id : 'name',    
+                  flex:  1,        // property defines the amount of space this column is going to take in the grid container with respect to all.	
+                  sortable: true,  // property to sort grid column data. 
+                  hideable: true   // property which allows column to be hidden run time on user request.
+               },{
+                  header: "Age", 
+                  dataIndex: 'age',
+                  flex: .5, 
+                  sortable: true,
+                  hideable: false   // this column will not be available to be hidden.
+               },{
+                  header: "Marks",
+                  dataIndex: 'marks',
+                  flex: .5, 
+                  sortable: true, 
+                  
+                  // renderer is used to manipulate data based on some conditions here 
+                  // who ever has marks greater than 75 will be displayed as 
+                  // 'Distinction' else 'Non Distinction'.
+                  renderer :  function (value, metadata, record, rowIndex, colIndex, store) {
+                     if (value > 75) {
+                        return "Distinction";	  
+                     } else {
+                        return "Non Distinction";
+                     }
+                  }
+               }]
+            });
+         });
+      </script>
+	  
+	    <script type = "text/javascript">
+         Ext.onReady(function() {
+            Ext.create('Ext.container.Container', {
+               renderTo : Ext.getBody(),
+               layout : {
+                  type :'fit'	
+               },
+               width : 600,
+               defaults: {
+                  bodyPadding: 15
+               },
+               items : [{
+                  title: 'Panel1',
+                  html : 'This is panel 1'
+               },{
+                  title: 'Panel2',
+                  html : 'This is panel 2'
+               },{
+                  title: 'Panel3',
+                  html : 'This is panel 3'
+               },{
+                  title: 'Panel4',
+                  html : 'This is panel 4'
+               }]
+            });
+         });
+      </script>
+	  
+	  
+	  
+	  
+	   <script type = "text/javascript">
+         Ext.onReady(function() {
+            win = new Ext.Window ({
+               title:'Email Window',
+               layout:'form',
+               width:400,
+               closeAction:'close',
+               target : document.getElementById('buttonId'),
+               plain: true,
+               
+               items: [{
+                  xtype : 'textfield',
+                  fieldLabel: 'To'
+               },{
+                  xtype : 'textfield',
+                  fieldLabel: 'CC'
+               },{
+                  xtype : 'textfield',
+                  fieldLabel: 'BCC'
+               },{
+                  xtype : 'textfield',
+                  fieldLabel: 'Subject'
+               },{
+                  xtype : 'textarea',
+                  fieldLabel: 'Email Message'
+               }],
+               
+               buttons: [{
+                  text: 'Save Draft',
+                  handler: function(){Ext.Msg.alert('Save Draft', 'Your msg is saved');}
+               },{
+                  text: 'Send',
+                  handler: function(){Ext.Msg.alert('Message Sent', 'Your msg is sent');}
+               },{
+                  text: 'Cancel',
+                  handler: function(){
+                     win.close(); Ext.Msg.alert('close', 'Email window is closed');}
+               }],
+               buttonAlign: 'center',
+            });
+            Ext.create('Ext.Button', {
+               renderTo: Ext.getElementById('buttonId'),
+               text: 'Click Me',
+               
+               listeners: {
+                  click: function() {
+                     win.show();
+                  }
+               }
+            });
+         });
+      </script>
+	  
+	  
+	    <script type = "text/javascript">
+         Ext.onReady(function() {    
+            function progressBar(v) {
+               return function()	{
+                  if(v == 10) {
+                     Ext.MessageBox.hide();
+                     result();
+                  } else {
+                     var i = v/9;
+                     Ext.MessageBox.updateProgress(i, Math.round(100*i)+'% completed');
+                  }
+               };
+            };
+            function showProgressBar() {
+               for(var i = 1; i < 11; i++) {
+                  setTimeout(progressBar(i), i*500);
+               }
+            }
+            function result() {
+               Ext.Msg.alert('status', 'Process completed succesfully');
+            }
+            Ext.create('Ext.Button', {
+               renderTo: Ext.getElementById('buttonId'),
+               text: 'Click Me',
+               
+               listeners: {
+                  click: function() {
+                     Ext.MessageBox.show ({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        progress:true,
+                        closable:false
+                     });
+                     showProgressBar();
+                  }
+               }
+            });
+         });
+      </script>
+	  
+	   <script type = "text/javascript">
+         Ext.onReady(function () {
+            Ext.create('Ext.tab.Panel', {
+               renderTo: Ext.getBody(),
+               height: 100,
+               width: 200,
+               
+               items: [{
+                  xtype: 'panel',
+                  title: 'Tab One',
+                  html: 'The first tab',
+                  listeners: {
+                     render: function() {
+                        Ext.MessageBox.alert('Tab one', 'Tab One was clicked.');
+                     }
+                  }
+               },{
+                  // xtype for all Component configurations in a Container
+                  title: 'Tab Two',
+                  html: 'The second tab',
+                  listeners: {
+                     render: function() {
+                        Ext.MessageBox.alert('Tab two', 'Tab Two was clicked.');
+                     }
+                  }
+               }]
+            });
+         });
+      </script>
+	  
+   </head>
+   
+   <body>
+      <div id = "gridDiv"></div>
+	  
+	  <p> Click the button to see window </p>
+      <div id = "buttonId"></div>
+	  
+	  
+	  <p> Click the button to see progress bar  </p>
+      <div id = "buttonId"></div>
+   </body>
+</html>
